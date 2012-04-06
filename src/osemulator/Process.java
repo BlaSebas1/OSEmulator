@@ -20,35 +20,30 @@ public class Process {
      */
     private int size;
     private int execTime;
-    private int pid;
-    HashMap<Integer,Integer> pids = new HashMap<Integer,Integer>();
+    private int pid; //Temporalmente no en uso
     
-    Process(){
+    public Process(){
         size = sizeAlloc();
         execTime = timeAlloc();
-        pid = idAlloc();
+        pid = 0; //Temporal
     }
     
     private int sizeAlloc(){
-        int i = 0;
+        int i = 1;
         Random rand = new Random();
         while(i % 2 != 0){
-            i = rand.nextInt(OSConstants.PROC_MAX_SIZE) + 1;
+            i = rand.nextInt(OSConstants.PROC_MAX_SIZE) + 1; //Indica que regresa
+                                                            //un entero entre 0 y
+                                                            //PROC_MAX_SIZE
         }
         return i;
     }
     private int timeAlloc(){
-        int i = 0;
+        int i = 1;
         Random rand = new Random();
         while(i % 5 != 0 || i % 2 != 0){
             i = rand.nextInt(OSConstants.PROC_MAX_TIME);
         }
-        return i;
-    }
-    private int idAlloc(){
-        int i = 1;
-        while(pids.containsValue(i))
-            i++;
         return i;
     }
     
@@ -65,6 +60,7 @@ public class Process {
         this.execTime = time;
     }
     public void adjustTime(int time){
-        this.execTime -= time;
+        if(this.execTime >= time)
+            this.execTime -= time;
     }
 }
