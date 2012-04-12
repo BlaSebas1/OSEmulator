@@ -2,9 +2,7 @@ package osemulator.test;
 
 /* * IMPORTS * */
 import osemulator.Process;
-import osemulator.Memory;
-import osemulator.MemoryBlock;
-import osemulator.MemoryBlockTooBigException;
+import osemulator.*;
 
 public class MemoryExtendedTest {
     public static void main(String ... args){
@@ -14,10 +12,10 @@ public class MemoryExtendedTest {
         while(main.getSize() > 0){  //Whilst we have memory left
             main.cpuTime(); //Is this necesary on the first memory allocation?
             Process x = new Process();
-            MemoryBlock y = new MemoryBlock(x);
+            System.out.println("*****Process: " + x.getProcessSize());
             try{
-                main.addMemoryBlock(y);
-            }catch(MemoryBlockTooBigException mbtbex){
+                main.addProcess(x,0);
+            }catch(ProcessTooBigException ex){
                 System.out.println("MemoryBlock/Process was too big. Ignore.");
             }
             System.out.println("MAIN MEMORY:: Total/Remaining: " + main.getTotalSize() + "/" + main.getSize());

@@ -12,6 +12,6 @@ import osemulator.*;
 public class OSEmulatorTest {
     public static void main(String ... args){
         Core core = new Core();
-        core.startEmu();
+//        core.startEmu();
     }
 }
