@@ -14,10 +14,10 @@ import java.util.Random;
 public class Core {
     private LinkedList<Memory> memory;
     private LinkedList<Process> processes;
-    
+    /*
     public Core(){
-        memory = new LinkedList<>();
-        processes = new LinkedList<>();
+        memory = new LinkedList<Memory>();
+        processes = new LinkedList<Process>();
         initialize();
     }
 
@@ -74,5 +74,5 @@ public class Core {
         Process x = new Process();
         processes.add(x);
     }
-    
+    */
 }
