@@ -3,28 +3,24 @@
  * and open the template in the editor.
  */
 package osemulator.test;
-
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import osemulator.Memory;
 import osemulator.OSConstants;
 import osemulator.Process;
 import osemulator.ProcessTooBigException;
 
-
 /**
  *
- * @author Omar
+ * @author Mario
  */
-public class FirstFitTest {
-    public static void main(String ... args){
-        FirstFit ff = new FirstFit();
-        ff.initialize();
-        ff.startAlgorithm();
+public class BestFitTest {
+  public static void main(String ... args){
+        BestFit bf = new BestFit();
+        bf.initialize();
+        bf.startAlgorithm();
     }
 }
-class FirstFit{
+class BestFit{
     Memory main;
     LinkedList<Process> queue;
     
@@ -52,18 +48,17 @@ class FirstFit{
         long startTime = System.currentTimeMillis();
         while(true){//System.currentTimeMillis() - startTime < 10000
             main.cpuTime();
-            main.sanitize();
             Process x = new Process();
             Process y = new Process();
             if(!queue.isEmpty()){//If there's elements in the queue
                 x = queue.pollFirst();
                 try{
-                    main.addProcess(x,1);
+                    main.addProcess(x,2);
                 }catch(ProcessTooBigException ex){
                     System.out.println("MemoryBlock/Process was too big. Sent to queue.");
                     queue.addLast(x);
                     try{
-                        main.addProcess(y,1);
+                        main.addProcess(y,2);
                     }catch(ProcessTooBigException ex2){
                         System.out.println("MemoryBlock/Process was too big. Sent to queue.");
                         queue.addLast(y);
@@ -71,7 +66,7 @@ class FirstFit{
                 }
             }else{
                 try{
-                    main.addProcess(y,1);
+                    main.addProcess(y,2);
                 }catch(ProcessTooBigException ex2){
                     System.out.println("MemoryBlock/Process was too big. Sent to queue.");
                     queue.addLast(y);
@@ -80,11 +75,6 @@ class FirstFit{
             
             
             System.out.println("MAIN MEMORY:: Total/Remaining: " + main.getTotalSize() + "/" + main.getSize());
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(FirstFit.class.getName()).log(Level.SEVERE, null, ex);
-            }
         }
     }
 }

@@ -4,6 +4,7 @@
  */
 package osemulator;
 
+import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -32,15 +33,23 @@ public class Process {
     private int pid; //Temporalmente no en uso
     private int wastedSpace;
     private int status;
+    private static HashMap<Integer,Integer> pids = new HashMap<Integer,Integer>();
                 //0 - Dead
                 //1 - Alive
                 //-1 - Inactive
     
     public Process(){
         processSize = sizeAlloc();
+        blockSize = processSize;
         execTime = timeAlloc();
-        pid = 0; //Temporal
+        pid = allocatePID(); //Temporald
         
+    }
+    public Process(int block){
+        this.blockSize = block;
+        processSize = block;
+        execTime = 0;
+        pid = pid + 1;
     }
     
     private int sizeAlloc(){
@@ -82,4 +91,25 @@ public class Process {
     public void adjustTime(int time){
         this.execTime -= time;
     }
+
+    public int getWastedSpace() {
+        return wastedSpace;
+    }
+
+    void update() {
+        this.blockSize = this.processSize;
+    }
+
+    void setWasted() {
+        this.wastedSpace = this.blockSize - this.processSize;
+    }
+
+    private int allocatePID() {
+        int pid = (int) (Math.random() * 100000 + 1);
+        while(pids.containsValue(Integer.valueOf(pid))){
+            pid = (int) (Math.random() * 100000 + 1);
+        }
+        return pid;
+    }
+
 }
