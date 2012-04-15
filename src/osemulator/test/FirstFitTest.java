@@ -79,9 +79,10 @@ class FirstFit{
             }
             
             
-            System.out.println("MAIN MEMORY:: Total/Remaining: " + main.getTotalSize() + "/" + main.getSize());
+            //System.out.println("MAIN MEMORY:: Total/Remaining: " + main.getTotalSize() + "/" + main.getSize());
+            main.displayProcesses();
             try {
-                Thread.sleep(500);
+                Thread.sleep(3000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(FirstFit.class.getName()).log(Level.SEVERE, null, ex);
             }

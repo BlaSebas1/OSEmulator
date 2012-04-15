@@ -4,6 +4,8 @@
  */
 package osemulator.test;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import osemulator.Memory;
 import osemulator.OSConstants;
 import osemulator.Process;
@@ -48,6 +50,7 @@ class BestFit{
         long startTime = System.currentTimeMillis();
         while(true){//System.currentTimeMillis() - startTime < 10000
             main.cpuTime();
+            main.sanitize();
             Process x = new Process();
             Process y = new Process();
             if(!queue.isEmpty()){//If there's elements in the queue
@@ -74,7 +77,14 @@ class BestFit{
             }
             
             
-            System.out.println("MAIN MEMORY:: Total/Remaining: " + main.getTotalSize() + "/" + main.getSize());
+            //System.out.println("MAIN MEMORY:: Total/Remaining: " + main.getTotalSize() + "/" + main.getSize());
+            main.displayProcesses();
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(FirstFit.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
+
 }

@@ -34,6 +34,7 @@ public class Memory {
                 proc.adjustTime(OSConstants.PROC_CPU_TIME);
                 if(proc.getTime() <= 0){//If is dead or finished
                     proc.setStatus(0);
+                    proc.setWasted(proc.getProcessSize());
                 }
             }
         }
@@ -89,20 +90,22 @@ public class Memory {
     public void bestFit(Process proc) throws ProcessTooBigException{
         boolean ex = true;
         int place = 0;
-        int initialWastedMemory = 0;
+        int initialWastedMemory = this.totalSize;
         int wastedMemory = 0;
-        if(this.memAvailable >= proc.getProcessSize()){
+        if(processes.isEmpty()){
             proc.setStatus(1);
-            proc.setBlockSize(proc.getProcessSize());
+            proc.setBlockSize(totalSize);
+            proc.setWasted();
             processes.add(proc);
+            updateProcesses(proc);
             updateMemory();
         }else{
         for(int i = 0;i<processes.size();i++){
             if(processes.get(i).getStatus() != 1){
                 if(processes.get(i).getProcessSize() >= proc.getProcessSize()){
                         wastedMemory = processes.get(i).getProcessSize()- proc.getProcessSize();
-                        if(i==0) initialWastedMemory = wastedMemory;
-                        if(wastedMemory<initialWastedMemory){
+                        //if(i==1) initialWastedMemory = wastedMemory;NOT NECESSARY
+                        if(wastedMemory <= initialWastedMemory){
                             initialWastedMemory = wastedMemory;
                             place = i;
                             ex = false;
@@ -115,6 +118,7 @@ public class Memory {
         }else{
             Process.clone(processes.get(place), proc);
             processes.get(place).setStatus(1);
+            updateProcesses(processes.get(place));
             updateMemory();
         }
         }
@@ -148,7 +152,6 @@ public class Memory {
         Process temp = new Process(processInList.getWastedSpace());
         processInList.update();
         processes.add(processes.indexOf(processInList) + 1, temp);
-
     }
 
     public void sanitize() {
@@ -163,6 +166,26 @@ public class Memory {
             }
         }
         updateMemory();
+    }
+
+    public void displayProcesses() {
+
+        for(Process p : processes){
+            int id = p.getPID();
+            int stat = p.getStatus();
+            String status = null;
+            if(stat != 1 && id == 1){
+                status = "Empty";
+            }else{
+                status = "Occup";
+            }
+            int time = p.getTime();
+            String remainingTime = Integer.toString(time);
+            
+            //System.out.println("Process: " + id + "," + status + "," + remainingTime);
+            System.out.format("Process: %07d%n , ",id);
+        }
+        System.out.println("********************************");
     }
     
 }

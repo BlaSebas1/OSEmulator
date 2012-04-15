@@ -42,6 +42,7 @@ public class Process {
         processSize = sizeAlloc();
         blockSize = processSize;
         execTime = timeAlloc();
+        wastedSpace = 0;
         pid = allocatePID(); //Temporald
         
     }
@@ -49,6 +50,7 @@ public class Process {
         this.blockSize = block;
         processSize = block;
         execTime = 0;
+        wastedSpace = block;
         pid = pid + 1;
     }
     
@@ -65,11 +67,15 @@ public class Process {
         int i = 1;
         Random rand = new Random();
         while(i % 5 != 0 || i % 2 != 0){
+            if(i==0){i = i = rand.nextInt(OSConstants.PROC_MAX_TIME); continue;}
             i = rand.nextInt(OSConstants.PROC_MAX_TIME);
         }
         return i;
     }
     
+    public int getPID(){
+        return this.pid;
+    }
     public int getStatus(){
         return this.status;
     }
@@ -98,6 +104,7 @@ public class Process {
 
     void update() {
         this.blockSize = this.processSize;
+        this.wastedSpace = 0;
     }
 
     void setWasted() {
@@ -111,5 +118,10 @@ public class Process {
         }
         return pid;
     }
+
+    void setWasted(int processSize) {
+        this.wastedSpace = processSize;
+    }
+
 
 }
